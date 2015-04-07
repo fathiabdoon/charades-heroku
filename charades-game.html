@@ -1,0 +1,288 @@
+ <link rel="import" href="components/polymer/polymer.html">
+
+  <link href="components/core-icons/social-icons.html" rel="import">
+  <link href="components/core-icons/core-icons.html" rel="import">
+  <link href="components/paper-fab/paper-fab.html" rel="import">
+
+  <link href="components/core-animated-pages/core-animated-pages.html" rel="import">
+  <link href="components/core-animated-pages/transitions/slide-up.html" rel="import">
+  <link href="components/core-animated-pages/transitions/list-cascade.html" rel="import">
+
+  <link href="components/paper-button/paper-button.html" rel="import">
+  <link href="components/paper-input/paper-input.html" rel="import">
+
+  <link href="components/paper-toast/paper-toast.html" rel="import" >
+  <link href="components/qr-code/qr-code.html" rel="import" >
+
+	<!-- new-game-form -->
+	<link rel="import" href="new-game-form.html">
+	<link rel="import" href="join-game-form.html">
+  <link rel="import" href="waiting-room.html">
+  <link rel="import" href="playing-room.html">
+ 
+
+  <polymer-element name="charades-game" attributes="page">
+  <template>
+
+    <style>
+      core-animated-pages {
+        height: 100%;
+      }
+
+      .container{
+        background-color: #ffff8d;
+      }
+
+      section {
+        overflow: hidden;
+      }
+
+      paper-fab {
+        /*background-color: #ff4081;*/
+        float:left; position: absolute
+      }
+
+      .content {
+        background-color: #00bbd3;
+      }
+
+      .top {
+        box-sizing: border-box; 
+        height: 80px;
+        background-color: #ffeb3b;
+        padding: 24px;
+        color: #fff;
+        font-size: 32px;
+      }
+      h1{
+      	background-color: #00bbd3;
+      }
+
+      h1, h2{
+      	/*background-color: #00bbd3;*/
+      	width: 100%;
+      	text-align: center;
+      	/*height: 50px;*/
+      	color: #fff;
+      	padding: 30px;
+        font-size: 48px;
+        margin: 0;
+      }
+
+      h4{
+      	background-color: #00bbd3;
+      	color: #fff;
+      	padding-top: 10px;
+      }
+
+      .footer {
+        height: 80px;
+      }
+
+      .tile-bottom {
+        padding: 8px;
+        color: #fff;
+      }
+
+      .white-text{
+        color: #fff;
+      }
+
+      .red{
+      	background-color: red;
+      }
+      .blue{
+      	background-color: blue;
+      }
+      .green{
+      	background-color: green;
+      }
+      .orange{
+      	background-color: orange;
+      }
+      .grey{
+      	background-color: grey;
+      }
+      .purple{
+      	background-color: purple;
+      }
+      .yellow{
+      	background-color: yellow;
+      }
+      .brown{
+      	background-color: brown;
+      }
+      .cyan{
+      	background-color: cyan;
+      }
+      paper-toast {
+        right: 10px;
+        left: auto;
+      }
+      .core-icon{
+        width: 40px;
+        height: 40px;
+      }
+      #qrcode {
+        width:10px;
+        height:10px;
+        margin-top:0px;
+      } 
+      .main-btn{
+        background-color: #00bbd3;
+        margin: 10px;
+        text-transform: lowercase;
+        height: 200px;
+        width: 200px;
+      }
+      #scores{
+        text-align: center;
+        color: #fff;
+      }
+
+
+    </style>
+
+    
+
+
+
+
+<core-animated-pages selected="{{page}}" transitions="hero-transition slide-up  cross-fade list-cascade" on-core-animated-pages-transition-end="{{complete}}">
+
+
+      <section layout vertical center>
+            <h1 hero cross-fade>{{x_title}}</h1>
+            <div layout vertical center>
+            	<paper-button raised hero hero-id="create-new-game" class="main-btn" on-tap="{{createNewGame}}"  >
+            		<h4>{{x_create_game}}</h4>
+            	</paper-button>
+            	<paper-button raised hero hero-id="join-game"  class="main-btn" on-tap="{{joinGame}}">
+            		<h4>{{x_join_game}}</h4>
+            	</paper-button>
+            </div>
+      </section>
+
+
+
+      <section layout vertical >
+        <div class="content {{teamcolor}} " flex layout vertical  cross-fade slide-up >
+        	<paper-fab icon="arrow-back" on-tap="{{homePage}}" hero hero-id="create-new-game" cross-fade></paper-fab>
+    			<div flex layout vertical center>
+    				<h2>{{x_create_game}}</h2>
+    				<content select="new-game-form" ></content>
+    			</div> 
+        </div>
+      </section>
+
+
+
+      <section layout vertical >
+        <div class="content {{teamcolor}} " flex layout vertical  cross-fade slide-up >
+        	<paper-fab icon="arrow-back" on-tap="{{homePage}}" hero hero-id="join-game" cross-fade></paper-fab>
+    			<div flex layout vertical center>
+    				<h2>{{x_join_game}}</h2>
+    				<content select="join-game-form" ></content>
+    			</div> 
+        </div>
+      </section>
+
+
+
+      <section layout vertical >
+        <div class="content {{teamcolor}} " flex layout vertical  cross-fade>
+          <div flex layout vertical center style="color:#fff">
+            <h2>
+                {{x_waiting_room}}
+                <core-icon class="core-icon" id="socialpersonicon" icon="{{person_icon}}"></core-icon>  
+            </h2>
+            <qr-code data="{{url}}#{{group}}"></qr-code><br/>
+            {{group}}
+            <content select="waiting-room" ></content>
+          </div> 
+        </div>
+      </section>
+
+
+
+      <section layout vertical >
+        <div class="content {{teamcolor}} " flex layout vertical  cross-fade slide-up >
+          <!-- <paper-fab icon="arrow-back" on-tap="{{homePage}}" hero hero-id="join-game" cross-fade></paper-fab> -->
+          <div flex layout vertical center>
+            <h2>{{x_playing_room}}</h2>
+          </div>
+
+          <div layout horizontal  flex style="text-align:center">
+            <!-- <div flex> -->
+            <div flex>
+              <content select="playing-room"></content>
+            </div> 
+
+          </div> 
+          <div id="scores">{{scores}}</div>
+        </div>
+      </section>
+
+
+
+    </core-animated-pages>
+
+
+    <paper-toast id="toast" text="{{toastmsg}}"></paper-toast>
+    
+
+
+  </template>
+
+
+  <script>
+
+ 
+    Polymer('charades-game', {
+
+      username: "",
+      x_username: "username",
+      x_title: "charades game for the mo foos",
+      x_create_game: "create a new game",
+      x_join_game: "join a game",
+      x_waiting_room: "the waiting room",
+      x_playing_room: "the playing room",
+      person_icon: "social:person",
+
+      teamcolor: "",
+      toastmsg: "",
+      group: "",
+      scores: "",
+      url: "http://localhost:3000/",
+
+      page: 0,
+
+      ready: function() {
+        //console.log("socialpersonicon");
+      },
+
+      toastmsgChanged: function() {
+        this.$.toast.show();
+      },
+
+      groupChanged: function(e){
+         //this.fire("group-code-from-create-new", {group: this.group});
+      },
+
+      createNewGame: function(e){
+      	this.page = 1;
+      },
+
+      joinGame: function(e){
+      	this.page = 2;
+      },
+
+      homePage: function(e){
+      	this.page = 0;
+      }
+
+
+    });
+
+  </script>
+  </polymer-element>

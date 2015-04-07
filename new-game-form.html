@@ -1,0 +1,131 @@
+<link rel="import" href="components/polymer/polymer.html">
+<link href="components/core-menu/core-menu.html" rel="import">
+<link href="components/paper-item/paper-item.html" rel="import">
+
+<polymer-element name="new-game-form" >
+  <template>
+    <style>
+    	#container{
+    		/*background: red*/
+    		color: #fff
+    	}
+    	#container  center, #container  div{
+    		margin: 15px;
+    	}
+    	paper-button{
+      		background-color: #00bbd3;
+      		text-transform: lowercase;
+      		margin: 5px;
+      	}
+      	.save_btn{
+      		background: #000;
+      		padding: 10px;
+      	}
+      	.red{
+      		background: #ff8a80;
+      	}
+        input{
+          height: 20px;
+          width: 150px
+        }
+
+    </style>
+
+
+	<!-- <paper-fab icon="arrow-back" on-tap="{{backTap}}" hero></paper-fab> -->
+    <div id="container" class=""> <!-- horizontal layout start slide-up list-cascade -->
+
+
+    	<div layout vertical center ><!-- style="background:red; margin:0" -->
+	    	<div style="margin-top:-10px">
+	    		<!-- <paper-input label="{{x_username}}" id="username" floatingLabel="true"></paper-input> -->
+          <input type="text" value="" placeholder="{{x_username}}" id="username" />
+	    	</div>
+	    	<center>
+	    		Number of players {{noofpayers}} <br/>
+	    		<input type="range" value="{{noofpayers}}" id="numberofplayers"  min="3" max="20">
+			</center>
+			<center>
+				Pick your team color<br/>
+				<select  id="teamcolor" class="teamcolors" on-change="{{teamcolorpicked}}">
+					<option></option>
+        	<template repeat="{{i in colors}}">
+         		<option>{{i}}</option>
+        	</template>
+				</select>
+			</center>
+
+			<div>
+				<paper-button raised class="save_btn" id="save_btn" on-click="{{createnewgame}}">{{x_create_game_save}}</paper-button>
+			</div>
+		</div>
+
+
+
+    </div>
+
+    
+
+  </template>
+  <script>
+  Polymer( 'new-game-form' , {
+      players: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+      colors: ["red", "green", "blue", "purple", "yellow", "orange", "cyan", "brown", "grey"],
+      x_create_game_save: "create game",
+      x_username: "username",
+      noofpayers: 3,
+      teamcolor: 0,
+
+      ready: function(){
+        //testing
+      	//this.$.username.value = "fathi";
+      	//this.$.teamcolor.value = "red";
+      	//this.fire("team:color", {color: this.$.teamcolor.value});
+
+      },
+     /* numberofplayersChanged: function(oldVal, newVal) {
+      	console.log(oldVal);
+      },*/
+      backTap: function(e,d,s) {
+      	  /*s.templateInstance.model.goback = "efg";*/
+      	  s.templateInstance.model.fire("go:back");
+          /*console.log(s.templateInstance.model.goback);*/
+      },
+      teamcolorpicked:function(e,d,s) {
+      	this.fire("team:color", {color: s.value});
+      	//console.log(this.$.fire("asd"));
+      	//d.templateInstance.model.teamcolor = "asdasd";//c.value;
+      	//console.log(this.$.container.setAttribute("class", "red"));
+      },
+      createnewgame:function(e){
+      	//console.log("createnewgame");
+      	//console.log(this.$.username.value);
+
+      	if(this.$.username.value.trim().length == 0)
+      	{	
+      		this.fire("error", {msg: "username can not be empty"});
+      		return;
+      	}
+
+      	if(this.$.teamcolor.value.trim().length == 0)
+      	{	
+      		this.fire("error", {msg: "pick a team color (this will be your team)"});
+      		return;
+      	}
+
+      	var newgame = {
+      					username: 			this.$.username.value.trim().toLowerCase(),
+      					numberofplayers: 	this.$.numberofplayers.value,
+      					teamcolor: 			this.$.teamcolor.value
+      	};
+
+      	this.fire("create:group", newgame);
+
+
+
+      }
+
+
+  });
+  </script>
+</polymer-element>
